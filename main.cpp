@@ -34,7 +34,31 @@ long long improvement(Problem& problem, Solution& solution, int video, int cache
 int main() {
     Problem problem = read_problem(cin);
     Solution solution(problem);
+    
+    // (improvement, (cache, video))
+    // Find cache location that give shighest improvement.
+    priority_queue<pair<int, pair<int, int>>> q;
+    for (int c = 0; c < problem.C; ++c) {
+        for (int v = 0; v < problem.V; ++v) {
+            int benefit = improvement(problem, solution, v, c);
+            q.push({benefit, {c, v}});
+        }
+    }
 
+    while (!q.empty()) {
+        auto d = q.top();
+        q.pop();
+        int benefit = d.first;
+        int c = d.second.first;
+        int v = d.second.second;
+        // Does it fit and not already exist?
+        auto& cache = solution.caches[c];
+        auto& video = problem.videos[v];
+        if (video.size <= cache.remaining && !cache.cached_videos.count(v)) {
+            cache.remaining -= video.size;
+            cache.cached_videos.insert(v);
+        }
+    }
 
     print(cout, solution);
     return 0;
