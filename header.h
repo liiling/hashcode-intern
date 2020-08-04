@@ -3,7 +3,7 @@ using namespace std;
 
 struct Endpoint {
     int L_d, K;
-    vector<pair<int, int> > connections; // (cache server, latency)
+    map<int, int> connected_caches; // cache_server -> latency
 };
 
 struct Request {
@@ -32,9 +32,10 @@ Problem read_problem(istream& s) {
     problem.endpoints.resize(problem.E);
     for (Endpoint& endpoint : problem.endpoints) {
         s >> endpoint.L_d >> endpoint.K;
-        endpoint.connections.resize(endpoint.K);
-        for (auto& connection : endpoint.connections) {
-            s >> connection.first >> connection.second;
+        for (int i = 0; i < endpoint.K; i++) {
+            int cache, latency;
+            s >> cache >> latency;
+            endpoint.connected_caches[cache] = latency;
         }
     }
     problem.requests.resize(problem.R);
