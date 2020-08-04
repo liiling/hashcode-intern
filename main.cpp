@@ -50,17 +50,12 @@ int main() {
     priority_queue<pair<int, pair<int, int>>> q;
 
     for (int v = 0; v < problem.V; ++v) {
-        for (int c = 0; c < problem.C; ++c) {
-        
-            //if (improvement(problem, solution, v, c) > 0 && !problem.videos[v].cache_servers.count(c)) {
-                //cerr << "gives improvement but not in cache_servers" << c << " " << v;
-            //}
+        for (int c : problem.videos[v].cache_servers) {
             double value = value2(problem, solution, v, c);
             q.push({value, {c, v}});
         }
-        //for (int c : problem.videos[v].cache_servers) {
-        //}
     }
+
     cerr << "queue size: " << q.size() << endl;
 
     set<int> cachedVideos;
