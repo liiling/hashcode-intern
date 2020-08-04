@@ -31,6 +31,16 @@ long long improvement(Problem& problem, Solution& solution, int video, int cache
     return score_increase;
 }
 
+// long long improvement(Problem& problem, Solution& solution, int video, int cache);
+double value1(Problem& problem, Solution& solution, int v, int c) {
+    int benefit = improvement(problem, solution, v, c);
+    return (double)benefit / (double)problem.videos[v].size;
+}
+
+double value2(Problem& problem, Solution& solution, int v, int c) {
+    return 1.0 / (double)problem.videos[v].size;
+}
+
 int main() {
     Problem problem = read_problem(cin);
     Solution solution(problem);
@@ -41,11 +51,13 @@ int main() {
 
     for (int v = 0; v < problem.V; ++v) {
         for (int c : problem.videos[v].cache_servers) {
-            int benefit = improvement(problem, solution, v, c);
-            q.push({benefit, {c, v}});
+            double value = value2(problem, solution, v, c);
+            q.push({value, {c, v}});
         }
     }
+    cerr << "queue size: " << q.size() << endl;
 
+    set<int> cachedVideos;
     while (!q.empty()) {
         auto d = q.top();
         q.pop();
