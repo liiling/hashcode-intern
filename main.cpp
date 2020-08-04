@@ -38,8 +38,9 @@ int main() {
     // (improvement, (cache, video))
     // Find cache location that give shighest improvement.
     priority_queue<pair<int, pair<int, int>>> q;
-    for (int c = 0; c < problem.C; ++c) {
-        for (int v = 0; v < problem.V; ++v) {
+
+    for (int v = 0; v < problem.V; ++v) {
+        for (int c : problem.videos[v].cache_servers) {
             int benefit = improvement(problem, solution, v, c);
             q.push({benefit, {c, v}});
         }

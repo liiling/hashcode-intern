@@ -13,6 +13,7 @@ struct Request {
 struct Video {
     int size;
     map<int, int> requests_from_endpoint; // endpoint -> #requests
+    set<int> cache_servers;
 };
 
 struct Problem {
@@ -42,6 +43,10 @@ Problem read_problem(istream& s) {
     for (Request& request : problem.requests) {
         s >> request.R_v >> request.R_e >> request.R_n;
         problem.videos[request.R_v].requests_from_endpoint[request.R_e] += request.R_n;
+
+        for (pair<int, int> connected_cach : problem.endpoints[request.R_e].connected_caches) {
+            problem.videos[request.R_v].cache_servers.insert(connected_cach.first);
+        }
     }
     return problem;
 }
